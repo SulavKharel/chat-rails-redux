@@ -1,16 +1,16 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
 Message.destroy_all
+puts 'destroying messages'
 User.destroy_all
+puts 'destroying users'
 Channel.destroy_all
+puts 'destroying channels'
+
+ActiveRecord::Base.connection.tables.each do |t|
+  ActiveRecord::Base.connection.reset_pk_sequence!(t)
+end
 
 names = %w(general paris react)
-nicknames = %w(Sulav Saad Tina Daniah Trouni Eugene Douglas)
+nicknames = %w(Saad Sulav Tina Louisa Daniah Alex Thomas Doug Eugene)
 
 channels = names.map do |name|
   Channel.find_or_create_by(name: name)
@@ -21,10 +21,10 @@ users = nicknames.map do |nickname|
 end
 
 20.times do
-  Message.create! user: user.sample, channel: channel.sample,content: Faker::HowIMetYourMother.quote
+  Message.create! user: users.sample, channel: channels.sample, content: Faker::HowIMetYourMother.quote
 end
 
 puts 'Channels:'
 channels.each do |channel|
-  puts "- #{channel.id}:: #{{channel.name}}"
+  puts "- #{channel.id}: #{channel.name}"
 end
