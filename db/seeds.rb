@@ -9,6 +9,9 @@ Message.destroy_all
 User.destroy_all
 Channel.destroy_all
 
+names = %w(general paris react)
+nicknames = %w(Sulav Saad Tina Daniah Trouni Eugene Douglas)
+
 channels = names.map do |name|
   Channel.find_or_create_by(name: name)
 end
