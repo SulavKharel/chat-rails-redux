@@ -8,18 +8,19 @@ class Message < ApplicationRecord
 
   def as_json(options = {})
     nickname = user.nickname.nil? ? user.email.match(/[^@]+/)[0] : user.nickname
+
     {
       id: id,
       author: nickname,
       content: content,
       created_at: created_at,
-      channel: channel_name
+      channel: channel.name
     }
   end
 
   private
 
   def broadcast_message
-    ActionCable.server.broadcast("channel_#{channel_name}", self)
+    ActionCable.server.broadcast("channel_#{channel.name}", self)
   end
 end
